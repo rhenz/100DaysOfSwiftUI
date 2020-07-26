@@ -9,23 +9,57 @@
 import SwiftUI
 
 struct ContentView: View {
-    private let students = ["Kim Chiu", "Dalisay", "Harry Roque"]
-    @State private var selectedStudent = "Kim Chiu"
+    @State private var checkAmount = ""
+    @State private var numberOfPeople = "2"
+    @State private var tipPercentage = 2
+    
+    let tipPercentages = [10, 15, 20, 25, 0]
+    
+    var totalPerPerson: Double {
+        let peopleCount = Double(Int(numberOfPeople) ?? 0 + 2)
+        let tipSelection = Double(tipPercentages[tipPercentage])
+        let orderAmount = Double(checkAmount) ?? 0
+        
+        let tipValue = orderAmount / 100 * tipSelection
+        let grandTotal = orderAmount + tipValue
+        let amountPerPerson = grandTotal / peopleCount
+        return amountPerPerson
+    }
     
     var body: some View {
-        
-        Picker("Select your student", selection: $selectedStudent) {
-            ForEach(0 ..< students.count) {
-                Text(self.students[$0])
+        NavigationView {
+            Form {
+                Section {
+                    TextField("Amount", text: $checkAmount)
+                        .keyboardType(.decimalPad)
+                    
+                    TextField("Number of People", text: $numberOfPeople)
+                        .keyboardType(.numberPad)
+                }
+                
+                Section(header: Text("How much tip do you want to leave?")) {
+                    Picker("Tip Percentage", selection: $tipPercentage) {
+                        ForEach(tipPercentages.indices) { index in
+                            Text("\(self.tipPercentages[index])%")
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+                
+                Section(header: Text("Total Amount")) {
+                    Text("$\(totalPerPerson * Double(Int(numberOfPeople) ?? 0 + 2), specifier: "%.2f")")
+                }
+                
+                Section(header: Text("Amount Per Person")) {
+                    Text("$\(totalPerPerson, specifier: "%.2f")")
+                }
             }
+            .navigationBarTitle("WeSplit", displayMode: .inline)
         }
-        
-        /*
-        Form {
-            ForEach(0 ..< 100) {
-                Text("Row \($0)")
-            }
-        }*/
+    }
+    
+    private func endEditing() {
+        UIApplication.shared.endEditing()
     }
 }
 
