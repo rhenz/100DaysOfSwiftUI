@@ -9,10 +9,14 @@
 import SwiftUI
 
 struct ButtonView: View {
+    
+    @State var selection = 0
+    
     var body: some View {
-        //        Button("Tap me!") {
-        //            print("Hello!")
-        //        }
+        let binding = Binding(
+            get: { self.selection },
+            set: { self.selection = $0 }
+            )
         
         Button(action: {
             print("Button was tapped")

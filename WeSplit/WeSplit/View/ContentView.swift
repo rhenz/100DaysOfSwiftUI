@@ -48,6 +48,7 @@ struct ContentView: View {
                 
                 Section(header: Text("Total Amount")) {
                     Text("$\(totalPerPerson * Double(Int(numberOfPeople) ?? 0 + 2), specifier: "%.2f")")
+                        .foregroundColor(tipPercentage == self.tipPercentages.count-1 ? .red : .white)
                 }
                 
                 Section(header: Text("Amount Per Person")) {
