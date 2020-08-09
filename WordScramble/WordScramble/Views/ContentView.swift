@@ -18,6 +18,8 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showAlert = false
     
+    @State private var score = 0
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -30,13 +32,27 @@ struct ContentView: View {
                     Image(systemName: "\($0.count).circle")
                     Text($0)
                 }
+                
+                // Reference for alingning views within stack views
+                // https://stackoverflow.com/questions/56443535/swiftui-text-alignment
+                
+                VStack(alignment: .trailing) {
+                    Text("Score:")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(.largeTitle)
+                    
+                    Text("\(score)")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
             }
             .navigationBarTitle(Text(rootWord))
             .onAppear(perform: startGame)
             .alert(isPresented: $showAlert) {
                 Alert(title: Text(errorTitle), message: Text(errorMessage), dismissButton: .default(Text("Ok")))
             }
+        .navigationBarItems(leading: LeftBarButton(action: startGame))
         }
+        .padding()
     }
     
     func addNewWord() {
@@ -58,6 +74,9 @@ struct ContentView: View {
             return
         }
         
+        // Add score
+        score += input.count
+        
         // Add to used words
         usedWords.insert(input, at: 0)
         newWord = ""
@@ -68,11 +87,18 @@ struct ContentView: View {
             if let startWords = try? String(contentsOf: startWordsUrl) {
                 let allWords = startWords.components(separatedBy: "\n")
                 rootWord = allWords.randomElement() ?? "silkworm"
+                
+                resetValues()
                 return
             }
         }
         
         fatalError("Could not load start.txt from Bundle")
+    }
+    
+    func resetValues() {
+        self.score = 0
+        self.usedWords.removeAll()
     }
     
     // This function basically checks if the word is used already
@@ -96,6 +122,9 @@ struct ContentView: View {
     
     // This function uses UITextChecker to check if it is a valid word.
     func isReal(word: String) -> Bool {
+        if word.count < 3 { return false }
+        if word == rootWord { return false }
+        
         let checker = UITextChecker()
         let range = NSRange(location: 0, length: word.utf16.count)
         let mispelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
@@ -112,5 +141,18 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+
+// Button
+struct LeftBarButton: View {
+    
+    var action: (()->Void)
+
+    var body: some View {
+        Button(action: action) {
+            Text("Restart Game")
+        }
     }
 }
