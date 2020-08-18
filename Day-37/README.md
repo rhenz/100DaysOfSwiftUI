@@ -17,9 +17,13 @@ ForEach(expenses.items, id: \.id) { item in
 }
 ```
 
+*to*
+
+```
 ForEach(expenses.items) { item in
     Text(item.name)
 }
+```
 
 - Sharing an `Observed Object` to a new view
 - Using UserDefaults to save objects as Data with the help of `Codable` protocol
