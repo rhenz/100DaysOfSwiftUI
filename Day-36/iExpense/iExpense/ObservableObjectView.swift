@@ -9,8 +9,8 @@
 import SwiftUI
 
 class User: ObservableObject {
-    @Published var firstName = "Bilbo"
-    @Published var lastName = "Baggins"
+    @Published var firstName = "Rhenzzee"
+    @Published var lastName = "Codes"
 }
 
 struct ObservableObjectView: View {
