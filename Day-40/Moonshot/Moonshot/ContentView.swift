@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  Moonshot
 //
-//  Created by Lawrence on 8/20/20.
+//  Created by Lawrence
 //  Copyright © 2020 JLCS. All rights reserved.
 //
 
@@ -20,7 +20,6 @@ struct ContentView: View {
                label: {
                   Image(mission.image)
                      .resizable()
-//                     .aspectRatio(contentMode: .fit)
                      .scaledToFit()
                      .frame(width: 44, height: 44)
                   
