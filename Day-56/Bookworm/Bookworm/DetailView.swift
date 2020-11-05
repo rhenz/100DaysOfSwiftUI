@@ -32,6 +32,9 @@ struct DetailView: View {
                   .offset(x: -5, y: -5)
             }
             
+            Text(readableDate(self.book.date))
+               .font(.caption)
+               .foregroundColor(Color(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)))
             Text(self.book.author ?? "Unknown Auther")
                .font(.title)
                .foregroundColor(.secondary)
@@ -60,6 +63,13 @@ struct DetailView: View {
       moc.delete(book)
 //      try? self.moc.save()
       presentationMode.wrappedValue.dismiss()
+   }
+   
+   private func readableDate(_ date: Date?) -> String {
+      var convertDate = date == nil ? Date() : date!
+      let dateFormatter = DateFormatter()
+      dateFormatter.dateStyle = .medium
+      return dateFormatter.string(from: convertDate)
    }
 }
 
